@@ -1,0 +1,9 @@
+[Unit]
+Description=A non accurate NTP client
+After=network.target
+
+[Timer]
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target

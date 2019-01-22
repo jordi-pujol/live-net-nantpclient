@@ -1,0 +1,17 @@
+# Sets the computer date-time from NTP.
+# To be ran once at computer boot after the network has been started.
+
+[Unit]
+Description=A non accurate NTP client
+DefaultDependencies=no
+Conflicts=shutdown.target
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/nantpclient start
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=basic.target

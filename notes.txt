@@ -1,0 +1,69 @@
+#!/bin/sh
+
+_head() {
+	local n="${1:-1}"
+	awk -v n=${n} 'NR <= n {print; rc=-1; next} {exit} END{exit rc+1}'
+}
+
+NTP_date_time() {
+	
+	# printf '%x\n' "'a" "'b" "'c" "'d" "'e"
+	
+	# print NTP date-time
+	date --date @$((0x`printf 'c%47s' | netcat -uw1 livenet 123 | xxd -s40 -l4 -p`-64#23GDW0))
+	date --date @$((0x`printf 'c%47s' | tr ' ' '\0' | netcat -uw1 livenet 123 | xxd -s40 -l4 -p`-2208988800))
+
+	date --date @$((0x`printf '%-48s' $'\x63' | netcat -uw1 livenet 123 | xxd -s40 -l4 -p`-2208988800))
+
+	date --date @$((0x`printf '%-48s' $'\x63' | netcat -uw1 livenet 123 | cut -c 41-44 | od -A n -v -t x1 | sed -re '\|0a$|s|||' -e '\| |s|||g'`-2208988800))
+
+	date --date @$((0x`printf '%-48s' $'\x63' | netcat -uw1 livenet 123 | od -j 40 -N 4 -A n -v -t x1 | tr -d ' '`-2208988800))
+
+	printf '%-48s' $'\x63' | netcat -uw1 livenet 123 | xxd -s40 -l4 -p
+
+	# No van:
+	echo $'\x10\077\053' | while IFS= read -r -n 1 c; do printf '%x' "'${c}"; done
+	printf '%-48s' $'\x63' | netcat -uw1 livenet 123 | cut -c 41-44 | while IFS= read -r -n 1 c; do; printf '%x' "'${c}"; done
+
+	# No van:
+	# od - coreutils
+	echo abc | od -A n -v -t x1 | tr -d ' \n'
+6162630a
+
+	# No van:
+	# bsdmainutils: /usr/bin/hexdump
+	echo abc | hexdump -ve '/1 "%02x"'
+6162630a
+
+	# get NTP date-time and set local time
+	date --set @$((0x`printf 'c%47s' | netcat -uw1 livenet 123 | xxd -s40 -l4 -p`-64#23GDW0))
+}
+#
+_kernel_random() {
+	local min="${1}" max="${2}"
+	local r="0x$(head -200 /dev/urandom | md5sum | cut -c 11-18)"
+	echo $((${min}+(${max}-${min}+1)*${r}/0xFFFFFFFF))
+}
+
+_awk_random() {
+	local min="${1}" max="${2}"
+	awk -v min=${min} -v max=${max} \
+	'BEGIN{srand(); print int(min+rand()*(max-min+1))}'
+}
+
+_kernel_random 10 20
+_kernel_random 10 20
+_kernel_random 10 20
+_kernel_random 10 20
+_kernel_random 10 20
+_kernel_random 10 20
+_kernel_random 100 200
+_kernel_random 100 200
+_kernel_random 100 200
+_kernel_random 100 200
+_kernel_random 100 200
+_kernel_random 100000 200000
+_kernel_random 100000 200000
+_kernel_random 100000 200000
+_kernel_random 100000 200000
+_kernel_random 100000 200000
