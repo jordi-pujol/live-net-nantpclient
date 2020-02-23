@@ -3,7 +3,8 @@ Description=A non accurate NTP client
 After=network.target
 
 [Timer]
-OnUnitActiveSec=1h
+OnBootSec=15sec
+OnUnitActiveSec=1d
 
 [Install]
 WantedBy=timers.target
