@@ -12,6 +12,7 @@ Type=simple
 ExecStart=/usr/sbin/nantpclient start
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
+IOSchedulingClass=idle
 
 [Install]
 WantedBy=basic.target
