@@ -53,8 +53,10 @@ LoadConfig() {
 	# Configuration parameters
 	ntpserver_1="*gateway *dhcp"
 	#ntpport_1="123"
-	ntpserver_2=""
+	ntpserver_2="0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org"
 	#ntpport_2="123"
+	ntpserver_3=""
+	#ntpport_3="123"
 
 	Interval=20
 
